@@ -123,7 +123,7 @@
 </head>
 <body>
 
-<div class="modal" id="modal">
+<div class="modal" id="modal" hidden>
   <form class="login" id="loginForm" autocomplete="on">
     <h2>Статистика</h2>
     <p>Влез, за да видиш посещенията и гласовете.</p>
@@ -366,12 +366,15 @@
     try{ var saved=JSON.parse(ss("nv_admin")||"null"); }catch(e){ saved=null; }
     if(saved&&saved.u){
       creds=saved;
+      /* вече си влязъл: показваме таблото веднага, без да мига прозорецът за вход */
+      $("dash").hidden=false; $("main").classList.add("loading");
       api(days).then(function(s){
+        $("main").classList.remove("loading");
         if(!s||s.error){ logout(""); return; }
         $("ignore").checked=ls("nv_ignore")==="1";
         $("modal").hidden=true; $("dash").hidden=false; render(s);
       }).catch(function(){ logout("Няма връзка с базата."); });
-    } else { $("u").focus(); }
+    } else { $("modal").hidden=false; $("u").focus(); }
   })();
 </script>
 </body>
