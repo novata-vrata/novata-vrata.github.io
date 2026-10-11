@@ -268,7 +268,7 @@
 </section>
 
 <article>
-<section>
+<section id="istoria">
   <div class="wrap">
     <h2>Как мина поръчката на врата от Порта Нова</h2>
 
@@ -329,7 +329,7 @@
 
 <hr>
 
-<section>
+<section id="snimki">
   <div class="wrap">
     <h2>Снимки: как изглежда вратата отблизо</h2>
     <p>Между касата и плочките има пролука, запълнена с пяна. Там трябваше да има чисто обръщане с плочки.</p>
@@ -361,21 +361,21 @@
     <p>Не съм единственият с подобен опит. Ето публичните оценки към <time datetime="2026-10-10">10 октомври 2026 г.</time> Оценките се променят с времето, затова отворете източниците и прочетете отзивите сами.</p>
     <h3 class="rgroup">Google Maps</h3>
     <div class="rgrid three">
-      <a class="rcard low" href="https://www.google.com/maps/place/?q=place_id:ChIJmx1GwI-FqkARNXkFXhw6AUE" target="_blank" rel="nofollow noopener noreferrer">
+      <a class="rcard low" href="https://www.google.com/maps/place/?q=place_id:ChIJmx1GwI-FqkARNXkFXhw6AUE" data-track="gmaps-sitnyakovo" target="_blank" rel="nofollow noopener noreferrer">
         <span class="rsrc">Google Maps</span>
         <span class="rname">Порта Нова – Ситняково</span>
         <span class="rscore"><b>3,1</b><span class="stars" aria-hidden="true"><span style="width:62.0%">★★★★★</span>★★★★★</span></span>
         <small>от 328 отзива</small>
         <span class="rlink">Виж отзивите ↗</span>
       </a>
-      <a class="rcard low" href="https://www.google.com/maps/place/?q=place_id:ChIJ9yTtlpqaqkARDWsHaRfrpvA" target="_blank" rel="nofollow noopener noreferrer">
+      <a class="rcard low" href="https://www.google.com/maps/place/?q=place_id:ChIJ9yTtlpqaqkARDWsHaRfrpvA" data-track="gmaps-lyulin" target="_blank" rel="nofollow noopener noreferrer">
         <span class="rsrc">Google Maps</span>
         <span class="rname">Порта Нова – Люлин</span>
         <span class="rscore"><b>3,4</b><span class="stars" aria-hidden="true"><span style="width:68.0%">★★★★★</span>★★★★★</span></span>
         <small>от 366 отзива</small>
         <span class="rlink">Виж отзивите ↗</span>
       </a>
-      <a class="rcard" href="https://www.google.com/maps/place/?q=place_id:ChIJX25kd0WHqkARR5t80JPK0LA" target="_blank" rel="nofollow noopener noreferrer">
+      <a class="rcard" href="https://www.google.com/maps/place/?q=place_id:ChIJX25kd0WHqkARR5t80JPK0LA" data-track="gmaps-mladost" target="_blank" rel="nofollow noopener noreferrer">
         <span class="rsrc">Google Maps</span>
         <span class="rname">Порта Нова – Младост</span>
         <span class="rscore"><b>4,2</b><span class="stars" aria-hidden="true"><span style="width:84.0%">★★★★★</span>★★★★★</span></span>
@@ -385,14 +385,14 @@
     </div>
     <h3 class="rgroup">Сайтове за мнения</h3>
     <div class="rgrid two">
-      <a class="rcard low" href="https://tvoetomnenie.bg/review/porta-nova.bg" target="_blank" rel="nofollow noopener noreferrer">
+      <a class="rcard low" href="https://tvoetomnenie.bg/review/porta-nova.bg" data-track="tvoetomnenie" target="_blank" rel="nofollow noopener noreferrer">
         <span class="rsrc">tvoetomnenie.bg</span>
         <span class="rname">Мнения за porta-nova.bg</span>
         <span class="rscore"><b>1,0</b><span class="stars" aria-hidden="true"><span style="width:20.0%">★★★★★</span>★★★★★</span></span>
         <small>от 8 отзива</small>
         <span class="rlink">Виж отзивите ↗</span>
       </a>
-      <a class="rcard low" href="https://www.spodelimnenie.com/vrati-porta-nova-i5455" target="_blank" rel="nofollow noopener noreferrer">
+      <a class="rcard low" href="https://www.spodelimnenie.com/vrati-porta-nova-i5455" data-track="spodelimnenie" target="_blank" rel="nofollow noopener noreferrer">
         <span class="rsrc">spodelimnenie.com</span>
         <span class="rname">Мнения за Врати Порта Нова</span>
         <span class="rscore"><b>1,5</b><span class="stars" aria-hidden="true"><span style="width:30.0%">★★★★★</span>★★★★★</span></span>
@@ -431,7 +431,7 @@
       <li>Кой взема размерите и кой поема отговорност, ако вратата не пасне?</li>
       <li>Пазете всичко писмено: договор, имейли, съобщения.</li>
     </ol>
-    <p style="margin-top:24px">Ако нещо се обърка, имате право на рекламация. Повече за правата си можете да прочетете на сайта на <a href="https://kzp.bg/" target="_blank" rel="noopener">Комисията за защита на потребителите</a>.</p>
+    <p style="margin-top:24px">Ако нещо се обърка, имате право на рекламация. Повече за правата си можете да прочетете на сайта на <a href="https://kzp.bg/" target="_blank" rel="noopener" data-track="kzp">Комисията за защита на потребителите</a>.</p>
   </div>
 </section>
 
@@ -613,7 +613,31 @@
         if(sec===sent && !ended) return; sent=sec;
         call("track_end",{p_id:id,p_seconds:sec,p_end:ended},true).catch(function(){});
       }
-      call("track_view",{p_path:location.pathname,p_ref:ref,p_device:dev}).then(function(r){ id=r; }).catch(function(){});
+      /* маркер на източника: ?src=bgmamma (или utm_source) */
+      var src=null;
+      try{
+        var q=new URLSearchParams(location.search), sv=(q.get("src")||q.get("utm_source")||"").toLowerCase();
+        if(/^[a-z0-9_-]{1,40}$/.test(sv)) src=sv;
+        if(q.has("src")||q.has("utm_source")){ q.delete("src"); q.delete("utm_source"); q.delete("utm_medium"); q.delete("utm_campaign");
+          var qs=q.toString(); history.replaceState(null,"",location.pathname+(qs?"?"+qs:"")+location.hash); }
+      }catch(e){}
+      var pending=0, maxSec=0;
+      function section(n){ if(n<=maxSec) return; maxSec=n; if(id) call("track_section",{p_id:id,p_section:n},true).catch(function(){}); else pending=Math.max(pending,n); }
+      call("track_view",{p_path:location.pathname,p_ref:ref,p_device:dev,p_src:src}).then(function(r){
+        id=r; if(id&&pending) call("track_section",{p_id:id,p_section:pending},true).catch(function(){});
+      }).catch(function(){});
+      /* докъде чете: 1 историята, 2 снимките, 3 оценките, 4 изводът */
+      if("IntersectionObserver" in window){
+        [["#istoria",1],["#snimki",2],["#drugi-otzivi",3],[".verdict",4]].forEach(function(p){
+          var el=document.querySelector(p[0]); if(!el) return;
+          var o=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ section(p[1]); o.disconnect(); } }); },{rootMargin:"0px 0px -40% 0px",threshold:0});
+          o.observe(el);
+        });
+      }
+      /* кликове към външните оценки */
+      document.querySelectorAll("[data-track]").forEach(function(a){
+        a.addEventListener("click",function(){ call("track_click",{p_target:a.dataset.track},true).catch(function(){}); });
+      });
       var v=document.querySelector(".verdict");
       if(v && "IntersectionObserver" in window){
         var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ ended=true; io.disconnect(); send(); } }); });
