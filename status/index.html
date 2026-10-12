@@ -177,7 +177,7 @@
     <h2>Статистика</h2>
     <p>Влез, за да видиш посещенията и гласовете.</p>
     <label for="u">Потребител</label>
-    <input id="u" name="username" autocomplete="username" required>
+    <input id="u" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
     <label for="p">Парола</label>
     <input id="p" name="password" type="password" autocomplete="current-password" required>
     <button id="btn" type="submit">Влез</button>
@@ -336,18 +336,31 @@
     function dur(s){ s=Math.round(s||0); if(s<60) return s+" сек"; var m=Math.floor(s/60), r=s%60; return m+" мин"+(r?" "+r+" с":""); }
     function refName(r){ if(!r||r==="direct") return "Директно"; return r; }
 
-    function api(d){
-      return fetch(SUPABASE_URL+"/rest/v1/rpc/admin_stats",{method:"POST",
-        headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},
-        body:JSON.stringify({p_user:creds.u,p_pass:creds.p,p_days:d})
-      }).then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); });
+    /* Заявка с повторни опити: при смяна WiFi ↔ мобилни данни връзката изчезва за секунда-две */
+    function post(name,body,tries){
+      tries=tries||4;
+      function once(){
+        var ctl=("AbortController" in window)?new AbortController():null;
+        var t=ctl?setTimeout(function(){ ctl.abort(); },12000):0;
+        return fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",cache:"no-store",signal:ctl?ctl.signal:undefined,
+          headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},body:JSON.stringify(body)
+        }).then(function(r){ clearTimeout(t);
+          if(r.status>=500){ var e=new Error("HTTP "+r.status); e.retry=true; throw e; }
+          if(!r.ok) throw new Error("HTTP "+r.status);
+          return r.json();
+        },function(e){ clearTimeout(t); e=e||new Error("net"); e.retry=true; throw e; });
+      }
+      return (function attempt(n){
+        return once().catch(function(e){
+          if(!e.retry || n>=tries) throw e;
+          return new Promise(function(res){ setTimeout(res,[1000,2000,4000][n-1]||4000); }).then(function(){ return attempt(n+1); });
+        });
+      })(1);
     }
-
+    function api(d){ return post("admin_stats",{p_user:creds.u,p_pass:creds.p,p_days:d}); }
     function rpc(name,args){
       var b={p_user:creds.u,p_pass:creds.p}; for(var k in args) b[k]=args[k];
-      return fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",
-        headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},body:JSON.stringify(b)
-      }).then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); });
+      return post(name,b);
     }
     var tt; function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(function(){ t.classList.remove("show"); },2200); }
     function xbtn(kind,id){ return '<td class="act"><button class="xbtn" type="button" data-kind="'+kind+'" data-id="'+esc(id)+'" title="Изтрий">✕</button></td>'; }
@@ -461,7 +474,7 @@
         $("main").classList.remove("loading");
         if(s && s.error){ logout("Сесията изтече. Влез отново."); return; }
         render(s);
-      }).catch(function(){ $("main").classList.remove("loading"); });
+      }).catch(function(){ $("main").classList.remove("loading"); toast("Няма връзка – опитай пак"); });
     }
 
     function done(r,msg){
@@ -552,7 +565,7 @@
 
     $("loginForm").addEventListener("submit",function(e){
       e.preventDefault();
-      var u=$("u").value.trim(), p=$("p").value;
+      var u=$("u").value.trim().toLowerCase(), p=$("p").value;
       if(!u||!p) return;
       $("btn").disabled=true; $("btn").textContent="Проверявам…"; $("err").textContent="";
       creds={u:u,p:p};
@@ -565,7 +578,7 @@
         $("modal").hidden=true; $("dash").hidden=false; render(s);
       }).catch(function(){
         creds=null; $("btn").disabled=false; $("btn").textContent="Влез";
-        $("err").textContent="Няма връзка с базата. Ако Supabase е заспал, събуди го с Restore.";
+        $("err").textContent="Няма интернет връзка (може би сменяш WiFi/мобилни данни). Опитай пак след малко.";
       });
     });
 
@@ -590,7 +603,11 @@
         if(!s||s.error){ logout(""); return; }
         $("ignore").checked=ls("nv_ignore")==="1";
         $("modal").hidden=true; $("dash").hidden=false; render(s);
-      }).catch(function(){ logout("Няма връзка с базата."); });
+      }).catch(function(){
+        /* няма връзка – не те изхвърляме; зареждаме пак, щом интернетът се върне */
+        $("main").classList.remove("loading"); toast("Няма връзка – ще опитам пак, щом се върне интернетът");
+        addEventListener("online",function(){ load(); },{once:true});
+      });
     } else { $("modal").hidden=false; $("u").focus(); }
   })();
 </script>
