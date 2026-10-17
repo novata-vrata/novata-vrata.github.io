@@ -18,7 +18,10 @@ jobs:
         run: sleep 90
       - name: Ping IndexNow
         run: |
-          body='{"host":"novata-vrata.github.io","key":"e17087d38417ca0d467b6582c08d54fa","keyLocation":"https://novata-vrata.github.io/e17087d38417ca0d467b6582c08d54fa.txt","urlList":["https://novata-vrata.github.io/"]}'
+          urls=$(curl -sS -m 30 https://novata-vrata.github.io/sitemap.xml | grep -o '<loc>[^<]*' | sed 's/<loc>//' | grep -v '/img/' | sed 's/.*/"&"/' | paste -sd, -)
+          [ -n "$urls" ] || urls='"https://novata-vrata.github.io/"'
+          echo "URLs: $urls"
+          body='{"host":"novata-vrata.github.io","key":"e17087d38417ca0d467b6582c08d54fa","keyLocation":"https://novata-vrata.github.io/e17087d38417ca0d467b6582c08d54fa.txt","urlList":['"$urls"']}'
           code=$(curl -sS -o out.txt -w '%{http_code}' -m 30 -X POST https://api.indexnow.org/indexnow \
             -H "Content-Type: application/json; charset=utf-8" -d "$body")
           echo "IndexNow -> $code $(cat out.txt)"
