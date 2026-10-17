@@ -9,4 +9,12 @@
     <image:image><image:loc>https://novata-vrata.github.io/img/porta-nova-vrata-proluka-dryjka.webp</image:loc></image:image>
     <image:image><image:loc>https://novata-vrata.github.io/img/porta-nova-vrata-gorna-proluka.webp</image:loc></image:image>
   </url>
+  <url>
+    <loc>https://novata-vrata.github.io/dogovor-vrata-po-poruchka/</loc>
+    <lastmod>2026-10-17</lastmod>
+  </url>
+  <url>
+    <loc>https://novata-vrata.github.io/greshen-razmer-vrata/</loc>
+    <lastmod>2026-10-17</lastmod>
+  </url>
 </urlset>
