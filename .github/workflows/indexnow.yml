@@ -1,0 +1,25 @@
+# Казва на Bing/Yandex/ChatGPT search (IndexNow), че сайтът е обновен – при всяка промяна в main.
+name: indexnow
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: [".github/**"]
+  workflow_dispatch: {}
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Wait for GitHub Pages to publish
+        run: sleep 90
+      - name: Ping IndexNow
+        run: |
+          body='{"host":"novata-vrata.github.io","key":"e17087d38417ca0d467b6582c08d54fa","keyLocation":"https://novata-vrata.github.io/e17087d38417ca0d467b6582c08d54fa.txt","urlList":["https://novata-vrata.github.io/"]}'
+          code=$(curl -sS -o out.txt -w '%{http_code}' -m 30 -X POST https://api.indexnow.org/indexnow \
+            -H "Content-Type: application/json; charset=utf-8" -d "$body")
+          echo "IndexNow -> $code $(cat out.txt)"
+          case "$code" in 200|202) ;; *) echo "::warning::IndexNow отговори $code";; esac
