@@ -207,6 +207,13 @@
       <div class="card kpi"><b id="k-votes">–</b><span>гласа за периода</span><em id="k-votes-all"></em></div>
     </section>
 
+    <section class="row">
+      <div class="card">
+        <h2>По страници</h2>
+        <div class="scroll"><table class="tbl"><thead><tr><th>Страница</th><th class="num">Посещения</th><th class="num">Днес</th><th class="num">Ср. време</th><th class="num">До края</th></tr></thead><tbody id="pages"></tbody></table></div>
+      </div>
+    </section>
+
     <section class="row two">
       <div class="card">
         <h2>Посещения по дни</h2>
@@ -268,7 +275,7 @@
     <section class="row">
       <div class="card">
         <h2>Последни посещения</h2>
-        <div class="scroll"><table class="tbl"><thead><tr><th>Кога</th><th>Откъде</th><th>Устройство</th><th>Маркер</th><th class="num">Време</th><th>Края</th><th></th></tr></thead><tbody id="plist"></tbody></table></div>
+        <div class="scroll"><table class="tbl"><thead><tr><th>Кога</th><th>Страница</th><th>Откъде</th><th>Устройство</th><th>Маркер</th><th class="num">Време</th><th>Края</th><th></th></tr></thead><tbody id="plist"></tbody></table></div>
       </div>
     </section>
 
@@ -375,6 +382,8 @@
       }).join(""):'<div class="empty">Няма изключени адреси.</div>';
     }
 
+    var PAGES={"/":"Начална","/dogovor-vrata-po-poruchka/":"Договор за врата по поръчка","/greshen-razmer-vrata/":"Грешен размер на вратата"};
+    function pageName(p){ if(!p) return "–"; var k=p.replace(/index\.html$/,""); return PAGES[k]||PAGES[k+"/"]||p; }
     function bars(el,items,fmt){
       if(!items||!items.length){ el.innerHTML='<div class="empty">Още няма данни.</div>'; return; }
       var max=Math.max.apply(null,items.map(function(i){return i.views;}))||1;
@@ -460,11 +469,17 @@
                '<td><span class="pill '+(v.choice==="yes"?"yes":"no")+'">'+(v.choice==="yes"?"Да":"Не")+'</span></td>'+xbtn("vote",v.id)+'</tr>';
       }).join(""):'<tr><td colspan="4" class="empty">Още няма гласове.</td></tr>';
 
+      var pg=s.pages||[];
+      $("pages").innerHTML=pg.length?pg.map(function(r){
+        return '<tr><td title="'+esc(r.name)+'">'+esc(pageName(r.name))+'</td><td class="num">'+nf.format(r.views)+'</td><td class="num">'+nf.format(r.today)+'</td>'+
+               '<td class="num">'+dur(r.avg_seconds)+'</td><td class="num">'+(r.views?Math.round(r.reached_end*100/r.views):0)+'%</td></tr>';
+      }).join(""):'<tr><td colspan="5" class="empty">Още няма посещения.</td></tr>';
+
       var pv=s.recent_views||[];
       $("plist").innerHTML=pv.length?pv.map(function(v){
-        return '<tr><td>'+tf.format(new Date(v.at))+'</td><td>'+esc(refName(v.referrer))+'</td><td>'+(DEV[v.device]||esc(v.device))+'</td><td>'+(v.src?esc(v.src):'–')+'</td>'+
+        return '<tr><td>'+tf.format(new Date(v.at))+'</td><td>'+esc(pageName(v.path))+'</td><td>'+esc(refName(v.referrer))+'</td><td>'+(DEV[v.device]||esc(v.device))+'</td><td>'+(v.src?esc(v.src):'–')+'</td>'+
                '<td class="num">'+dur(v.seconds)+'</td><td>'+(v.reached_end?'<span class="pill end">да</span>':'–')+'</td>'+xbtn("view",v.id)+'</tr>';
-      }).join(""):'<tr><td colspan="7" class="empty">Още няма посещения.</td></tr>';
+      }).join(""):'<tr><td colspan="8" class="empty">Още няма посещения.</td></tr>';
       renderIPs(s);
     }
 
