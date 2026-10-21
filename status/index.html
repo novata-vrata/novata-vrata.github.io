@@ -214,14 +214,6 @@
       </div>
     </section>
 
-    <section class="row">
-      <div class="card">
-        <h2>Ключови думи в Google <small id="kw-upd">от Search Console</small></h2>
-        <div class="scroll"><table class="tbl"><thead><tr><th>Търсене</th><th>Страница</th><th class="num">Позиция</th><th class="num">Промяна</th><th class="num">Показвания</th><th class="num">Кликове</th></tr></thead><tbody id="kw"></tbody></table></div>
-        <p class="hint">Последните 7 дни спрямо предишните 7. Позиция 1–10 е първа страница. Google дава данните с 2–3 дни закъснение.</p>
-      </div>
-    </section>
-
     <section class="row two">
       <div class="card">
         <h2>Посещения по дни</h2>
@@ -482,17 +474,6 @@
         return '<tr><td title="'+esc(r.name)+'">'+esc(pageName(r.name))+'</td><td class="num">'+nf.format(r.views)+'</td><td class="num">'+nf.format(r.today)+'</td>'+
                '<td class="num">'+dur(r.avg_seconds)+'</td><td class="num">'+(r.views?Math.round(r.reached_end*100/r.views):0)+'%</td></tr>';
       }).join(""):'<tr><td colspan="5" class="empty">Още няма посещения.</td></tr>';
-
-      var kw=s.keywords||[];
-      $("kw-upd").textContent=s.keywords_updated?("данни до "+df.format(new Date(s.keywords_updated+"T12:00:00"))):"от Search Console";
-      $("kw").innerHTML=kw.length?kw.map(function(k){
-        var ch="–";
-        if(k.prev_position!=null&&k.position!=null){ var d=Math.round((k.prev_position-k.position)*10)/10;
-          ch=d>0?'<span class="pill yes">▲ '+d+'</span>':(d<0?'<span class="pill no">▼ '+(-d)+'</span>':'0'); }
-        else if(k.position!=null) ch='<span class="pill end">ново</span>';
-        return '<tr><td>'+esc(k.query)+'</td><td>'+esc(pageName(k.page))+'</td><td class="num">'+(k.position!=null?k.position:'–')+'</td><td class="num">'+ch+'</td>'+
-               '<td class="num">'+nf.format(k.impressions)+'</td><td class="num">'+nf.format(k.clicks)+'</td></tr>';
-      }).join(""):'<tr><td colspan="6" class="empty">Още няма данни от Google.</td></tr>';
 
       var pv=s.recent_views||[];
       $("plist").innerHTML=pv.length?pv.map(function(v){
